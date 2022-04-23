@@ -1,6 +1,11 @@
 Rails.application.routes.draw do
-  Rails.application.routes.draw do
-    # route to test your configuration
-    get '/hello', to: 'application#hello_world'
-  end
+  resources :visits, only: [:index]
+  resources :sites, only: [:index, :show]
+
+  post "/signup", to: "users#create"
+  get "/me", to: "users#show"
+
+  post "/login", to: "sessions#create"
+  delete "/logout", to: "sessions#destroy"
+
 end
