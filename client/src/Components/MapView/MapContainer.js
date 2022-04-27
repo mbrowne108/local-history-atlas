@@ -10,6 +10,25 @@ function MapContainer({ sites, user, onNewVisit, onDeleteVisit, onNewSite }) {
   const [filterValue, setFilterValue] = useState('')
   const filteredSites = sites.filter(site => site.category.toLowerCase().includes(filterValue.toLowerCase()))
 
+  const sitesWithDistFrom = filteredSites.map((site) => {
+    if ((mapCenter.lat === site.lat) && (mapCenter.lng === site.lng)) {
+      return 0
+    } else {
+      let radlat1 = Math.PI * mapCenter.lat/180;
+      let radlat2 = Math.PI * site.lat/180;
+      let theta = mapCenter.lng-site.lng;
+      let radtheta = Math.PI * theta/180;
+      let dist = Math.sin(radlat1) * Math.sin(radlat2) + Math.cos(radlat1) * Math.cos(radlat2) * Math.cos(radtheta);
+      if (dist > 1) {
+          dist = 1;
+      }
+      dist = Math.acos(dist);
+      dist = dist * 180/Math.PI;
+      dist = dist * 60 * 1.1515;
+      return {...site, dist: Math.round(dist * 100) / 100}
+    }
+  }).sort((a, b) => a.dist - b.dist)
+
   function handleCategoryChange(e) {
     setFilterValue(e.target.value)
   }
@@ -68,11 +87,18 @@ function MapContainer({ sites, user, onNewVisit, onDeleteVisit, onNewSite }) {
                 <option value='Nature'>Nature</option>
             </select>
             <div className="list-group d-grid">
-                {filteredSites.map(site => <SiteCard key={site.id} site={site} mapCenter={mapCenter} user={user} onNewVisit={onNewVisit} onDeleteVisit={onDeleteVisit}/>)}
+                {sitesWithDistFrom.map(site => 
+                  <SiteCard 
+                    key={site.id} 
+                    site={site} 
+                    user={user} 
+                    onNewVisit={onNewVisit} 
+                    onDeleteVisit={onDeleteVisit} 
+                  />)
+                }
                 <div className="card btn btn-lg btn-outline-primary" data-bs-toggle="modal" data-bs-target='#new-site-modal'>
                   <p className="h3 justify-content-center" ><strong>+</strong></p>
                 </div>
-                {/* <button className="btn btn-lg btn-outline-primary" data-bs-toggle="modal" data-bs-target='#new-site-modal'>+</button> */}
             </div>
             <div className='modal fade' id='new-site-modal'>
               <NewSiteForm user={user} onNewSite={onNewSite}/>

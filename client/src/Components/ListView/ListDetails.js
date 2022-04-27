@@ -58,17 +58,6 @@ function ListDetails({ site, image, onNewVisit, user }) {
             (error) => console.error(error)
         );
     }, [site.lat, site.lng])
-    
-
-    // USE THIS CODE TO CONVERT ADDRESS INTO COORDS
-
-    // Geocode.fromAddress("310 first ave, new york, ny 10009").then(
-    //     res => {
-    //         const { lat, lng } = res.results[0].geometry.location
-    //         console.log(lat, lng)
-    //     }
-    // )
-
 
     return (
         <div className="modal-dialog modal-dialog-scrollable modal-lg container text-center bg-light">
@@ -129,9 +118,9 @@ function ListDetails({ site, image, onNewVisit, user }) {
                         <h6>Visitor Comments</h6>
                         <ul className="list-group">
                             {site.visits.map(visit => {
-                                const date = new Date(visit.user.created_at)
+                                const timestamp = new Date(visit.created_at).toLocaleString()
                                 return <li className="list-group-item" key={visit.id}>
-                                    <h6>Written by {visit.user.username}: <small>{date.toDateString()}</small></h6>
+                                    <h6>Written by {visit.user.username}: <small>{timestamp}</small></h6>
                                     <p>{visit.comment}</p>
                                     <p>Rating: {visit.rating}/5</p>
                                 </li>
