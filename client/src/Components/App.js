@@ -7,10 +7,10 @@ import ProfileContainer from "./Profile/ProfileContainer.js";
 import MapContainer from "./MapView/MapContainer.js";
 import ListContainer from "./ListView/ListContainer.js";
 
-
-
 function App() {
   const [user, setUser] = useState(null)
+  const [sites, setSites] = useState([])
+  const [visits, setVisits] = useState([])
 
   useEffect(() => {
     fetch("/me").then((r) => {
@@ -18,6 +18,18 @@ function App() {
         r.json().then((user) => setUser(user))
       }
     })
+  }, [visits])
+
+  useEffect(() => {
+    fetch('/sites')
+    .then(r => r.json())
+    .then(data => setSites(data))
+  }, [visits])
+
+  useEffect(() => {
+    fetch('/visits')
+    .then(r => r.json())
+    .then(data => setVisits(data))
   }, [])
 
   function handleLogoutClick() {
@@ -26,6 +38,21 @@ function App() {
         setUser(null)
       }
     })
+  }
+
+  function onNewVisit(newVisit) {
+    const newVisitArray = [...visits, newVisit]
+    setVisits(newVisitArray)
+  }
+
+  function onDeleteVisit(deletedVisit) {
+    const updatedVisits = visits.filter((visit) => visit.id !== deletedVisit.id)
+    setVisits(updatedVisits)
+  }
+
+  function onNewSite(newSite) {
+    const newSiteArray = [...sites, newSite]
+    setSites(newSiteArray)
   }
 
   if (!user) return <Login onLogin={setUser}/>
@@ -39,13 +66,13 @@ function App() {
           <Route 
             exact path="/"
             element={
-              <MapContainer/>
+              <MapContainer user={user} sites={sites} onNewVisit={onNewVisit} onDeleteVisit={onDeleteVisit} onNewSite={onNewSite} />
             }
           />
           <Route 
             exact path="/listview"
             element={
-              <ListContainer/>
+              <ListContainer user={user} sites={sites} onNewVisit={onNewVisit} onNewSite={onNewSite}/>
             }
           />
           <Route 
