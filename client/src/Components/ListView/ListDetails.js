@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import Geocode from "react-geocode";
 
-function ListDetails({ site, image, onNewVisit, user }) {
+function ListDetails({ site, image, user, onNewVisit, onDeleteVisit }) {
     const [address, setAddress] = useState('')
     const [showForm, setShowForm] = useState(false)
     const [errors, setErrors] = useState([])
@@ -19,6 +19,18 @@ function ListDetails({ site, image, onNewVisit, user }) {
         let value = e.target.value
         setFormData({...formData, [e.target.name]: value})
     }
+
+    function handleDelete() {
+        const visit = site.visits.find(vst => vst.user.id === user.id)
+        const result = window.confirm(`Are you sure you want to delete this visit?`)
+        if (result) {
+            fetch(`/visits/${visit.id}`, {
+                method: "DELETE",
+            })
+                .then(r => r.json())
+                .then(() => onDeleteVisit(visit))
+        }
+      }
 
     function formSubmit(e) {
         e.preventDefault()
@@ -60,7 +72,7 @@ function ListDetails({ site, image, onNewVisit, user }) {
     }, [site.lat, site.lng])
 
     return (
-        <div className="modal-dialog modal-dialog-scrollable modal-lg container text-center bg-light">
+        <div className="modal-dialog modal-dialog-scrollable modal-lg container bg-light">
             <div className="modal-content">
                 <div className="modal-header">
                     <h1 className="modal-title display-6">{site.name}</h1>
@@ -79,15 +91,15 @@ function ListDetails({ site, image, onNewVisit, user }) {
                                 href={`https://maps.google.com/?q=${site.lat},${site.lng}`} 
                                 target="_blank" 
                                 rel="noopener noreferrer">
-                                    <img src={require("./Placeholders/map_icon.png")} alt="map icon"/>
+                                    <img src={require("../Assets/Icons/map_icon.png")} alt="map icon"/>
                             </a>
                         </h6>
                         <h6>Category: {site.category}</h6>
                         {formattedDescription.map(para => <p key={para}>{para}</p>)}
                     </div>
                     {!visit ? 
-                        <button className="btn btn-outline-primary" onClick={() => setShowForm(!showForm)}>I visited here!</button> : 
-                        <button className="btn btn-outline-primary" disabled >Already visited</button>
+                        <button className="btn btn-outline-primary" onClick={() => setShowForm(!showForm)}><img src={require("../Assets/Icons/map_pin_empty.png")} alt="pin_empty"/>Visit Here!</button> : 
+                        <button className="btn btn-outline-primary" onClick={handleDelete}><img src={require("../Assets/Icons/map_pin_filled.png")} alt="pin_filled"/>Remove Visit</button>
                     }
                     <br/><br/>
                     {showForm ? 

@@ -72,7 +72,7 @@ function App() {
           <Route 
             exact path="/listview"
             element={
-              <ListContainer user={user} sites={sites} onNewVisit={onNewVisit} onNewSite={onNewSite}/>
+              <ListContainer user={user} sites={sites} onNewVisit={onNewVisit} onDeleteVisit={onDeleteVisit} onNewSite={onNewSite} />
             }
           />
           <Route 

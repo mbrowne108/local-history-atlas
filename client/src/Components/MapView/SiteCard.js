@@ -6,7 +6,14 @@ function SiteCard({ site, user, onNewVisit, onDeleteVisit }) {
   site.visits.map((vst) => {
     return totalRatings += vst.rating
   })
-  const averageRating = Math.round((totalRatings / site.visits.length) * 100 / 100)
+
+  const averageRating = Math.round(totalRatings / site.visits.length)
+  let starRating = ""
+
+  for (let i = 0; i < 5; i++) {
+    i < averageRating ? starRating += "★" : starRating += "☆"
+  }
+
 
   const userVisits = user.sites.map((vst) => {
     if (vst.id === site.id) {
@@ -18,7 +25,6 @@ function SiteCard({ site, user, onNewVisit, onDeleteVisit }) {
 
   function handleDelete() {
     const visit = site.visits.find(vst => vst.user.id === user.id)
-    console.log(visit)
     const result = window.confirm(`Are you sure you want to delete this visit?`)
     if (result) {
         fetch(`/visits/${visit.id}`, {
@@ -30,14 +36,13 @@ function SiteCard({ site, user, onNewVisit, onDeleteVisit }) {
   }
 
   return (
-    <div >
+    <div>
       <div className="list-group-item list-group-item-action">
-        <h5 className="d-inline-block">{site.name} <small>{averageRating || averageRating === 0 ? `${averageRating} stars` : null} <small>{site.dist} miles away </small></small></h5>
+        <h6 className="d-inline-block">{site.name} <small>{averageRating || averageRating === 0 ? starRating : null} <small>{site.dist} miles away </small></small></h6>
         {userVisits.includes(site.id) ? 
-          <button className="btn btn-outline-secondary float-right" onClick={handleDelete}> <img src={require("./map_pin_filled.png")} alt="pin_filled"/></button> :
-          <button className="btn btn-outline-secondary float-right" data-bs-toggle="modal" data-bs-target={`#new-visit-modal-${site.id}`}> <img src={require("./map_pin_empty.png")} alt="pin_empty"/></button>
+          <button className="btn btn-sm btn-outline-secondary float-end" onClick={handleDelete}> <img src={require("../Assets/Icons/map_pin_filled.png")} alt="pin_filled"/></button> :
+          <button className="btn btn-sm btn-outline-secondary float-end" data-bs-toggle="modal" data-bs-target={`#new-visit-modal-${site.id}`}> <img src={require("../Assets/Icons/map_pin_empty.png")} alt="pin_empty"/></button>
         }
-        <p className="float-right"> </p>
       </div>
       <div className='modal fade' id={`new-visit-modal-${site.id}`}>
         <NewVisitForm site={site} user={user} onNewVisit={onNewVisit}/>

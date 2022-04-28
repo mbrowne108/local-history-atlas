@@ -5,9 +5,11 @@ import SiteCard from "./SiteCard.js";
 import MapPin from "./MapPin.js";
 import NewSiteForm from "./NewSiteForm.js";
 
+
 function MapContainer({ sites, user, onNewVisit, onDeleteVisit, onNewSite }) {
   const [mapCenter, setMapCenter] = useState({zoom: 15})
   const [filterValue, setFilterValue] = useState('')
+
   const filteredSites = sites.filter(site => site.category.toLowerCase().includes(filterValue.toLowerCase()))
 
   const sitesWithDistFrom = filteredSites.map((site) => {

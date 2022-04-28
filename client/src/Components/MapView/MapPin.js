@@ -1,32 +1,41 @@
 import React from "react";
-import ReactHover, { Trigger, Hover } from "react-hover";
+import { OverlayTrigger, Popover } from 'react-bootstrap';
 
 function MapPin({ site }) {
-  const hoverOptions = {
-    followCursor: false,
-    shiftX: 0,
-    shiftY: 0,
+  let totalRatings = 0
+  site.visits.map((vst) => {
+    return totalRatings += vst.rating
+  })
+
+  const averageRating = Math.round(totalRatings / site.visits.length)
+  let starRating = ""
+
+  for (let i = 0; i < 5; i++) {
+    i < averageRating ? starRating += "★" : starRating += "☆"
   }
+
+  const pinInfo = (
+    <Popover id="popover-basic" title="Popover">
+      <div className="card">
+        <div className="card-header text-center h6">{site.name}</div>
+        <div className="p-2">
+          <small>{starRating}</small><br/>
+          <small>Category: {site.category}</small><br/>
+          <small>{site.dist} miles away from you</small>
+        </div>
+        {/* <div className="btn btn-sm btn-outline-primary">Details</div> */}
+      </div>
+    </Popover>
+  );
 
   return (
     <div>
-      <ReactHover options={hoverOptions}>
-        <Trigger type="trigger">
-          <div>
-            <img type="button" src={require("./map_pin_filled.png")} alt="pin" />
-            <p className="card" style={{width: 100 + 'px'}}><strong>{site.name}</strong></p>
-          </div>
-        </Trigger>
-        <Hover type="hover" >
-          <div className="card" style={{width: 160 + 'px'}}>
-            <div className="card-header h6">{site.name}</div>
-            <div className="card-body text-left">
-              <p>Category: {site.category}</p>
-              <p>{site.dist} miles away from you</p>
-            </div>
-          </div>
-        </Hover>
-      </ReactHover>
+      <OverlayTrigger trigger="click" placement="top" overlay={pinInfo}>
+        <div>
+          <img type="button" src={require("../Assets/Icons/map_pin_filled.png")} alt="pin" />
+          <p className="badge bg-primary">{site.name}</p>
+        </div>
+      </OverlayTrigger>
     </div>
   )
 }
