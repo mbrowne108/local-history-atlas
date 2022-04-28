@@ -9,6 +9,7 @@ import NewSiteForm from "./NewSiteForm.js";
 function MapContainer({ sites, user, onNewVisit, onDeleteVisit, onNewSite }) {
   const [mapCenter, setMapCenter] = useState({zoom: 15})
   const [filterValue, setFilterValue] = useState('')
+  const [sitesNumber, setSitesNumber] = useState(10)
 
   const filteredSites = sites.filter(site => site.category.toLowerCase().includes(filterValue.toLowerCase()))
 
@@ -50,14 +51,16 @@ function MapContainer({ sites, user, onNewVisit, onDeleteVisit, onNewSite }) {
   // }
 
   const handleApiLoaded = (map, maps) => {
-    let boundsData = map.getBounds()
-    let norEast = boundsData.getNorthEast()
-    let souWest = boundsData.getSouthWest()
-    let norWest = new maps.LatLng(norEast.lat(), souWest.lng())
-    let souEast = new maps.LatLng(souWest.lat(), norEast.lng())
+    // let boundsData = map.getBounds()
+    // let norEast = boundsData.getNorthEast()
+    // let souWest = boundsData.getSouthWest()
+    // let norWest = new maps.LatLng(norEast.lat(), souWest.lng())
+    // let souEast = new maps.LatLng(souWest.lat(), norEast.lng())
 
-    let bounds = {NE: norEast, NW: norWest, SE: souEast, SW: souWest}
+    // let bounds = {NE: norEast, NW: norWest, SE: souEast, SW: souWest}
+
   };
+
   
   return (
     <div className="row m-3">
@@ -69,7 +72,7 @@ function MapContainer({ sites, user, onNewVisit, onDeleteVisit, onNewSite }) {
           yesIWantToUseGoogleMapApiInternals
           onGoogleApiLoaded={({ map, maps }) => handleApiLoaded(map, maps)}
         >
-          {sitesWithDistFrom.map(site => 
+          {sitesWithDistFrom.slice(0, sitesNumber).map(site => 
             <MapPin 
               key={site.id}
               lat={site.lat} 
@@ -80,32 +83,40 @@ function MapContainer({ sites, user, onNewVisit, onDeleteVisit, onNewSite }) {
         </GoogleMapReact>
       </div>
       <div className="container col-5">
-            <select className="form-select col mt-2 mb-2 mr-auto ml-auto" onChange={handleCategoryChange}>
-                <option value=''>Filter by category...</option>
-                <option value='Architecture'>Architecture</option>
-                <option value='Events/Stories'>Events/Stories</option>
-                <option value='Object'>Object</option>
-                <option value='Food/Drink'>Food/Drink</option>
-                <option value='Nature'>Nature</option>
-            </select>
-            <div className="list-group d-grid">
-                {sitesWithDistFrom.map(site => 
-                  <SiteCard 
-                    key={site.id} 
-                    site={site} 
-                    user={user} 
-                    onNewVisit={onNewVisit} 
-                    onDeleteVisit={onDeleteVisit} 
-                  />)
-                }
-                <div className="card btn btn-lg btn-outline-primary" data-bs-toggle="modal" data-bs-target='#new-site-modal'>
-                  <p className="h3 justify-content-center" ><strong>+</strong></p>
-                </div>
-            </div>
-            <div className='modal fade' id='new-site-modal'>
-              <NewSiteForm user={user} onNewSite={onNewSite}/>
+        <div className="row">
+          <select className="form-select col m-2" onChange={handleCategoryChange}>
+            <option value=''>Filter by category...</option>
+            <option value='Architecture'>Architecture</option>
+            <option value='Events/Stories'>Events/Stories</option>
+            <option value='Object'>Object</option>
+            <option value='Food/Drink'>Food/Drink</option>
+            <option value='Nature'>Nature</option>
+          </select>
+          <div className="btn-group col-5 mt-2 mb-2">
+            <button className="btn btn-sm btn-outline-primary" disabled>Per page</button>
+            <button className="btn btn-sm btn-outline-primary" onClick={() => setSitesNumber(5)}>5</button>
+            <button className="btn btn-sm btn-outline-primary" onClick={() => setSitesNumber(10)}>10</button>
+            <button className="btn btn-sm btn-outline-primary" onClick={() => setSitesNumber(25)}>25</button>
+          </div>
+        </div>
+        <div className="list-group d-grid">
+            {sitesWithDistFrom.slice(0, sitesNumber).map(site => 
+              <SiteCard 
+                key={site.id} 
+                site={site} 
+                user={user} 
+                onNewVisit={onNewVisit} 
+                onDeleteVisit={onDeleteVisit} 
+              />)
+            }
+            <div className="card btn btn-lg btn-outline-primary" data-bs-toggle="modal" data-bs-target='#new-site-modal'>
+              <p className="h3 justify-content-center" ><strong>+</strong></p>
             </div>
         </div>
+        <div className='modal fade' id='new-site-modal'>
+          <NewSiteForm user={user} onNewSite={onNewSite}/>
+        </div>
+      </div>
     </div>
   );
 }

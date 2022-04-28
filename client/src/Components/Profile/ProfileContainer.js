@@ -1,15 +1,10 @@
 import React from "react";
 import GoogleMapReact from 'google-map-react';
-import ReactHover, { Trigger, Hover } from "react-hover";
+
 
 function ProfileContainer({ user }) {
   const visits = user.visits
   const profileCreateDate = new Date(user.created_at)
-  const hoverOptions = {
-    followCursor: false,
-    shiftX: 0,
-    shiftY: 0,
-  }
 
   const handleApiLoaded = (map, maps) => {
   };
@@ -40,15 +35,9 @@ function ProfileContainer({ user }) {
           onGoogleApiLoaded={({ map, maps }) => handleApiLoaded(map, maps)}
         >
           {user.sites.map(site => 
-            <div lat={site.lat} lng={site.lng}>
-              <ReactHover options={hoverOptions}>
-                <Trigger type="trigger">
-                  <img type="button" src={require("../Assets/Icons/map_pin_filled.png")} alt="pin" />
-                </Trigger>
-                <Hover type="hover">
-                  <p className="badge bg-primary">{site.name}</p>
-                </Hover>
-              </ReactHover>
+            <div id={site.id} lat={site.lat} lng={site.lng}>
+              <img type="button" src={require("../Assets/Icons/map_pin_filled.png")} alt="pin" />
+              {/* <p className="badge bg-primary">{site.name}</p> */}
             </div>
           )}
         </GoogleMapReact>
