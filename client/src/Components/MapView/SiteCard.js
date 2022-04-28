@@ -34,8 +34,8 @@ function SiteCard({ site, user, onNewVisit, onDeleteVisit }) {
       <div className="list-group-item list-group-item-action">
         <h5 className="d-inline-block">{site.name} <small>{averageRating || averageRating === 0 ? `${averageRating} stars` : null} <small>{site.dist} miles away </small></small></h5>
         {userVisits.includes(site.id) ? 
-          <button className="btn btn-outline-secondary float-right" onClick={handleDelete}> 🗹</button> :
-          <button className="btn btn-outline-secondary float-right" data-bs-toggle="modal" data-bs-target={`#new-visit-modal-${site.id}`}> ☐</button>
+          <button className="btn btn-outline-secondary float-right" onClick={handleDelete}> <img src={require("./map_pin_filled.png")} alt="pin_filled"/></button> :
+          <button className="btn btn-outline-secondary float-right" data-bs-toggle="modal" data-bs-target={`#new-visit-modal-${site.id}`}> <img src={require("./map_pin_empty.png")} alt="pin_empty"/></button>
         }
         <p className="float-right"> </p>
       </div>

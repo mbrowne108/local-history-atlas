@@ -67,12 +67,12 @@ function MapContainer({ sites, user, onNewVisit, onDeleteVisit, onNewSite }) {
           yesIWantToUseGoogleMapApiInternals
           onGoogleApiLoaded={({ map, maps }) => handleApiLoaded(map, maps)}
         >
-          {filteredSites.map(site => 
+          {sitesWithDistFrom.map(site => 
             <MapPin 
               key={site.id}
               lat={site.lat} 
               lng={site.lng} 
-              text={site.name}
+              site={site}
             />
           )}
         </GoogleMapReact>
