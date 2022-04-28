@@ -5,7 +5,6 @@ import SiteCard from "./SiteCard.js";
 import MapPin from "./MapPin.js";
 import NewSiteForm from "./NewSiteForm.js";
 
-
 function MapContainer({ sites, user, onNewVisit, onDeleteVisit, onNewSite }) {
   const [mapCenter, setMapCenter] = useState({zoom: 15})
   const [filterValue, setFilterValue] = useState('')
@@ -42,26 +41,9 @@ function MapContainer({ sites, user, onNewVisit, onDeleteVisit, onNewSite }) {
       setMapCenter(info)
     })
   }, [])
-  
-  // function getUserCoords() {
-  //   navigator.geolocation.getCurrentPosition((pos) => {
-  //     const info = {lat: pos.coords.latitude, lng: pos.coords.longitude, zoom: 15}
-  //     setMapCenter(info)
-  //   })
-  // }
 
-  const handleApiLoaded = (map, maps) => {
-    // let boundsData = map.getBounds()
-    // let norEast = boundsData.getNorthEast()
-    // let souWest = boundsData.getSouthWest()
-    // let norWest = new maps.LatLng(norEast.lat(), souWest.lng())
-    // let souEast = new maps.LatLng(souWest.lat(), norEast.lng())
+  const handleApiLoaded = (map, maps) => {};
 
-    // let bounds = {NE: norEast, NW: norWest, SE: souEast, SW: souWest}
-
-  };
-
-  
   return (
     <div className="row m-3">
       <div className="container col-6 text-center" style={{ height: '540px', width: '960px' }}>

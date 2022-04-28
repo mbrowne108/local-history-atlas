@@ -7,7 +7,10 @@ function Login({ onLogin }) {
 
   return (
     <div>
-      <h1 className='container rounded p-3 my-2 border bg-light display-1 text-center'>Local History Atlas</h1>
+      <div className="container rounded p-3 my-2 border bg-light text-center">
+        <h1 className='display-1'>Atlas of Curiosities</h1>
+        <p className="display-6 fst-italic fst-light"><small>A website dedicated to the collection and mapping of local history and lore</small></p>
+      </div>
       <div className="container card text-center col-6">
         {showLogin ? (
             <>
