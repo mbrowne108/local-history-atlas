@@ -37,11 +37,11 @@ function SiteCard({ site, user, onNewVisit, onDeleteVisit }) {
 
   return (
     <div>
-      <div className="list-group-item list-group-item-action">
-        <h6 className="d-inline-block">{site.name} <small>{averageRating || averageRating === 0 ? starRating : null} <small>{site.dist} miles away </small></small></h6>
+      <div className="list-group-item list-group-item-action row">
+        <h6 className="d-inline-block col-sm-11">{site.name} <small>{averageRating || averageRating === 0 ? starRating : null} <small>{site.dist} miles away </small></small></h6>
         {userVisits.includes(site.id) ? 
-          <button className="btn btn-sm btn-outline-secondary float-end" onClick={handleDelete}> <img src={require("../Assets/Icons/map_pin_filled.png")} alt="pin_filled"/></button> :
-          <button className="btn btn-sm btn-outline-secondary float-end" data-bs-toggle="modal" data-bs-target={`#new-visit-modal-${site.id}`}> <img src={require("../Assets/Icons/map_pin_empty.png")} alt="pin_empty"/></button>
+          <button className="btn btn-sm btn-outline-secondary col-sm-1" onClick={handleDelete}> <img src={require("../Assets/Icons/map_pin_filled.png")} alt="pin_filled"/></button> :
+          <button className="btn btn-sm btn-outline-secondary col-sm-1" data-bs-toggle="modal" data-bs-target={`#new-visit-modal-${site.id}`}> <img src={require("../Assets/Icons/map_pin_empty.png")} alt="pin_empty"/></button>
         }
       </div>
       <div className='modal fade' id={`new-visit-modal-${site.id}`}>
