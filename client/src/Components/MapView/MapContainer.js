@@ -66,7 +66,7 @@ function MapContainer({ sites, user, onNewVisit, onDeleteVisit, onNewSite }) {
       </div>
       <div className="container col-sm-5">
         <div className="row">
-          <select className="form-select col-sm m-2" onChange={handleCategoryChange}>
+          <select className="form-select col-sm mt-2" onChange={handleCategoryChange}>
             <option value=''>Filter by category...</option>
             <option value='Architecture'>Architecture</option>
             <option value='Events/Stories'>Events/Stories</option>
