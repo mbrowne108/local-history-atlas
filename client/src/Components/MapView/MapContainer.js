@@ -64,9 +64,9 @@ function MapContainer({ sites, user, onNewVisit, onDeleteVisit, onNewSite }) {
           )}
         </GoogleMapReact>
       </div>
-      <div className="container col-5">
+      <div className="container col-sm-5">
         <div className="row">
-          <select className="form-select col m-2" onChange={handleCategoryChange}>
+          <select className="form-select col-sm m-2" onChange={handleCategoryChange}>
             <option value=''>Filter by category...</option>
             <option value='Architecture'>Architecture</option>
             <option value='Events/Stories'>Events/Stories</option>
@@ -74,7 +74,7 @@ function MapContainer({ sites, user, onNewVisit, onDeleteVisit, onNewSite }) {
             <option value='Food/Drink'>Food/Drink</option>
             <option value='Nature'>Nature</option>
           </select>
-          <div className="btn-group col-5 mt-2 mb-2">
+          <div className="btn-group col-sm-4 mt-2 mb-2">
             <button className="btn btn-sm btn-outline-primary" disabled>Per page</button>
             <button className="btn btn-sm btn-outline-primary" onClick={() => setSitesNumber(5)}>5</button>
             <button className="btn btn-sm btn-outline-primary" onClick={() => setSitesNumber(10)}>10</button>

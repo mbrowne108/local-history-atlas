@@ -1,17 +1,17 @@
 import React from "react";
 import GoogleMapReact from 'google-map-react';
-
+import ReactHover, { Trigger, Hover } from "react-hover";
 
 function ProfileContainer({ user }) {
   const visits = user.visits
   const profileCreateDate = new Date(user.created_at)
 
-  const handleApiLoaded = (map, maps) => {
+  const hoverOptions = {
   };
 
   return (
     <div className="row">
-      <div className="card col-6">
+      <div className="card col-sm-6">
         <div className="card-header">
           <h2>{user.username}'s Profile</h2>
           <h5>Member since {profileCreateDate.toLocaleDateString()}</h5>
@@ -31,13 +31,17 @@ function ProfileContainer({ user }) {
           bootstrapURLKeys={{ key: process.env.REACT_APP_GOOGLE_MAPS_API_KEY }}
           center={{lat: 39.8283, lng: -98.5795}}
           zoom={4.3}
-          yesIWantToUseGoogleMapApiInternals
-          onGoogleApiLoaded={({ map, maps }) => handleApiLoaded(map, maps)}
         >
           {user.sites.map(site => 
-            <div id={site.id} lat={site.lat} lng={site.lng}>
-              <img type="button" src={require("../Assets/Icons/map_pin_filled.png")} alt="pin" />
-              {/* <p className="badge bg-primary">{site.name}</p> */}
+            <div key={site.id} lat={site.lat} lng={site.lng}>
+              <ReactHover options={hoverOptions}>
+                <Trigger type="trigger">
+                  <img type="button" src={require("../Assets/Icons/map_pin_filled.png")} alt="pin" />
+                </Trigger>
+                <Hover type="hover">
+                  <p className="badge bg-primary">{site.name}</p>
+                </Hover>
+              </ReactHover> 
             </div>
           )}
         </GoogleMapReact>

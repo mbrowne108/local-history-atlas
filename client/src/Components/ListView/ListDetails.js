@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import Geocode from "react-geocode";
 
 function ListDetails({ site, image, user, onNewVisit, onDeleteVisit }) {
+    const [showAddress, setShowAddress] = useState(false)
     const [address, setAddress] = useState('')
     const [showForm, setShowForm] = useState(false)
     const [errors, setErrors] = useState([])
@@ -30,7 +31,17 @@ function ListDetails({ site, image, user, onNewVisit, onDeleteVisit }) {
                 .then(r => r.json())
                 .then(() => onDeleteVisit(visit))
         }
-      }
+    }
+
+    function handleShowAddress() {
+        setShowAddress(false)
+        {Geocode.fromLatLng(site.lat, site.lng).then(
+            res => {
+                setAddress(res.results[0].formatted_address)
+            },
+        (error) => console.error(error))
+        } 
+    }
 
     function formSubmit(e) {
         e.preventDefault()
@@ -62,14 +73,15 @@ function ListDetails({ site, image, user, onNewVisit, onDeleteVisit }) {
     Geocode.setLanguage("en");
     Geocode.setRegion("us");
     Geocode.enableDebug();
-    useEffect(() => {
-        Geocode.fromLatLng(site.lat, site.lng).then(
-            res => {
-                setAddress(res.results[0].formatted_address)
-            },
-            (error) => console.error(error)
-        );
-    }, [site.lat, site.lng])
+
+    // useEffect(() => {
+    //     Geocode.fromLatLng(site.lat, site.lng).then(
+    //         res => {
+    //             setAddress(res.results[0].formatted_address)
+    //         },
+    //         (error) => console.error(error)
+    //     );
+    // }, [])
 
     return (
         <div className="modal-dialog modal-dialog-scrollable modal-lg container bg-light">
@@ -85,7 +97,16 @@ function ListDetails({ site, image, user, onNewVisit, onDeleteVisit }) {
                     <h6>Information</h6>
                     <div className="card p-2">
                         <h6>Location: 
-                            <small> {address} ({site.lat}, {site.lng}) </small> 
+                            {showAddress ? 
+                                <small>
+                                    {' ' + address + ' '}
+                                    <button className="btn btn-sm btn-outline-primary" onClick={handleShowAddress}>Show coordinates</button>  
+                                </small> :
+                                <small>
+                                    {' ' + site.lat}, {site.lng + ' '}
+                                    <button className="btn btn-sm btn-outline-primary" onClick={() => setShowAddress(true)}>Show address</button> 
+                                </small> 
+                            }
                             <a 
                                 className="btn btn-sm btn-outline-primary" 
                                 href={`https://maps.google.com/?q=${site.lat},${site.lng}`} 
