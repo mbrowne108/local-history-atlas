@@ -1,24 +1,33 @@
 import React, { useState, useEffect } from "react";
 import Geocode from "react-geocode";
 
-function ListDetails({ site, image, user, onNewVisit, onDeleteVisit }) {
+function ListDetails({ site, image, user, onNewVisit, onDeleteVisit, onUpdateVisit }) {
     const [showAddress, setShowAddress] = useState(false)
     const [address, setAddress] = useState('')
     const [showForm, setShowForm] = useState(false)
     const [errors, setErrors] = useState([])
+    const [showEditComment, setShowEditComment] = useState(false)
     const [formData, setFormData] = useState({
         site_id: site.id,
         comment: '',
         rating: 0
     })
-
     const visit = site.visits.find(vst => vst.user.id === user.id)
-
+    const [editForm, setEditForm] = useState({
+        site_id: site.id,
+        comment: '',
+        rating: 0
+    })
     const formattedDescription = site.description.split(/\r?\n/)
 
     function handleChange(e) {
         let value = e.target.value
         setFormData({...formData, [e.target.name]: value})
+    }
+
+    function handleEdit(e) {
+        let value = e.target.value
+        setEditForm({...editForm, [e.target.name]: value})
     }
 
     function handleDelete() {
@@ -68,6 +77,32 @@ function ListDetails({ site, image, user, onNewVisit, onDeleteVisit }) {
             }
         })
     }
+
+    function handleUpdate(e) {
+        e.preventDefault()
+
+        fetch(`/visits/${visit.id}`, {
+          method: "PATCH",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify(editForm),
+        })
+        .then(r => {
+            if (r.ok) {
+                r.json()
+                .then((updatedVisit) => onUpdateVisit(updatedVisit))
+                setEditForm({
+                    site_id: site.id,
+                    comment: '',
+                    rating: 0
+                })
+                setShowEditComment(() => !showEditComment)
+            } else {
+                r.json().then(err => setErrors(err.errors))
+            }
+        })
+    }
     
     Geocode.setApiKey(process.env.REACT_APP_GOOGLE_MAPS_API_KEY)
     Geocode.setLanguage("en");
@@ -91,7 +126,7 @@ function ListDetails({ site, image, user, onNewVisit, onDeleteVisit }) {
                     <button type="button" className="btn-close" data-bs-dismiss="modal"></button>
                 </div>
                 <div className="text-center">
-                    <img className="img-fluid" src={image} alt="Placeholder"/>
+                    <img className="img-fluid img-thumbnail" src={image} alt="site-image" style={{ height: '400px', width: 'auto' }}/>
                 </div>
                 <div className="modal-body text-left">
                     <h6>Information</h6>
@@ -119,8 +154,7 @@ function ListDetails({ site, image, user, onNewVisit, onDeleteVisit }) {
                         {formattedDescription.map(para => <p key={para}>{para}</p>)}
                     </div>
                     {!visit ? 
-                        <button className="btn btn-outline-primary" onClick={() => setShowForm(!showForm)}><img src={require("../Assets/Icons/map_pin_empty.png")} alt="pin_empty"/>Visit Here!</button> : 
-                        <button className="btn btn-outline-primary" onClick={handleDelete}><img src={require("../Assets/Icons/map_pin_filled.png")} alt="pin_filled"/>Remove Visit</button>
+                        <button className="btn btn-outline-primary" onClick={() => setShowForm(!showForm)}><img src={require("../Assets/Icons/map_pin_empty.png")} alt="pin_empty"/>Visit Here!</button> : null
                     }
                     <br/><br/>
                     {showForm ? 
@@ -152,11 +186,40 @@ function ListDetails({ site, image, user, onNewVisit, onDeleteVisit }) {
                         <ul className="list-group">
                             {site.visits.map(visit => {
                                 const timestamp = new Date(visit.created_at).toLocaleString()
-                                return <li className="list-group-item" key={visit.id}>
-                                    <h6>Written by {visit.user.username}: <small>{timestamp}</small></h6>
-                                    <p>{visit.comment}</p>
-                                    <p>Rating: {visit.rating}/5</p>
-                                </li>
+                                let starRating = ''
+                                for (let i = 0; i < 5; i++) {
+                                        i < visit.rating ? starRating += "★" : starRating += "☆"
+                                }
+                                if (visit.user.id === user.id) {
+                                    return (
+                                        <li className="list-group-item list-group-item-primary" key={visit.id}>
+                                            <h6>Written by you: <small>{timestamp}</small> {' '}
+                                                <button className="badge bg-secondary rounded-pill" onClick={() => setShowEditComment(!showEditComment)}>Edit</button> { }
+                                                <button className="badge bg-secondary rounded-pill" onClick={handleDelete}>Delete</button>
+                                            </h6>
+                                            {showEditComment ? 
+                                                <form className="col-sm-6" onSubmit={handleUpdate}>
+                                                    <input type="text" name="comment" value={editForm.comment} onChange={handleEdit} placeholder={visit.comment} className='form-control'/>
+                                                    <input type="number" name="rating" value={editForm.rating} onChange={handleEdit} placeholder={visit.rating} className='form-control'/>
+                                                    <button className="btn btn-secondary">Submit Changes</button>
+                                                </form> :
+                                                <div>
+                                                    <p>{visit.comment}</p>
+                                                    <p>Rating: {starRating}</p>
+                                                </div>
+                                            }
+                                            
+                                        </li>
+                                    )
+                                } else {
+                                    return (
+                                        <li className="list-group-item" key={visit.id}>
+                                            <h6>Written by {visit.user.username}: <small>{timestamp}</small></h6>
+                                            <p>{visit.comment}</p>
+                                            <p>Rating: {starRating}</p>
+                                        </li>
+                                    )
+                                }
                             })}
                         </ul>
                     </div>

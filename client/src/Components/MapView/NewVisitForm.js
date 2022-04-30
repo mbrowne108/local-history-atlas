@@ -2,10 +2,11 @@ import React, { useState } from "react";
 
 function NewVisitForm({ site, user, onNewVisit }) {
     const [errors, setErrors] = useState([])
+    const [image, setImage] = useState(null)
     const [formData, setFormData] = useState({
         site_id: site.id,
         comment: '',
-        rating: 0
+        rating: 0,
     })
 
     function handleChange(e) {
@@ -17,6 +18,9 @@ function NewVisitForm({ site, user, onNewVisit }) {
         e.preventDefault()
         const visit = site.visits.find(vst => vst.user.id === user.id)
         if (visit) return alert("You've already visited here!")
+
+        const imageUpload = new FormData()
+        imageUpload.append('image', image)
 
         fetch(`/visits`, {
           method: "POST",
@@ -37,6 +41,11 @@ function NewVisitForm({ site, user, onNewVisit }) {
             } else {
                 r.json().then(err => setErrors(err.errors))
             }
+
+        })
+        fetch(`/sites/${site.id}`, {
+            method: "PATCH",
+            body: imageUpload
         })
     }
 
@@ -65,6 +74,10 @@ function NewVisitForm({ site, user, onNewVisit }) {
                         <div className='mb-3'>
                             <label>Rating: <small>(between 0 and 5)</small></label>
                             <input type="number" name="rating" value={formData.rating} onChange={handleChange} className='form-control'/>
+                        </div>
+                        <div className='mb-3'>
+                            <label>Upload a photo of your visit</label>
+                            <input type="file" accept="image/*" name="image" value={formData.image} onChange={(e) => setImage(e.target.files[0])} className='form-control'/>
                         </div>
                         <div className='text-center'>
                             <button type="submit" className='btn btn-primary col-4'>Add Visit</button>  

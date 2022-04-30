@@ -1,6 +1,7 @@
 class Site < ApplicationRecord
     has_many :visits
     has_many :users, through: :visits
+    has_one_attached :image
 
     validates :name, presence: true, uniqueness: true
     validates :lat, numericality: { other_than: 0 }

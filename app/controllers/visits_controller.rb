@@ -16,6 +16,16 @@ class VisitsController < ApplicationController
         render json: visit, status: :created
     end
 
+    def update
+        visit = find_visit
+        if visit
+            visit.update!(visit_params)
+            render json: visit
+        else
+            render json: { error: "Visit not found" }, status: :not_found
+        end
+    end
+
     def destroy
         visit = find_visit
         if visit.user == @current_user

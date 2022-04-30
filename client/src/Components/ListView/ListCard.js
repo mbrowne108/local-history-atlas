@@ -2,10 +2,13 @@ import React from "react";
 import ListDetails from './ListDetails.js'
 
 
-function ListCard({ site, user, onNewVisit, onDeleteVisit }) {
-  let image = ""
+function ListCard({ site, user, onNewVisit, onDeleteVisit, onUpdateVisit }) {
+  let image
 
-  switch (site.category) {
+  if (site.image) {
+    image = site.image
+  } else {
+    switch (site.category) {
       case "Food/Drink": image = require("../Assets/Placeholders/food_drink_placeholder.png")
       break;
       case "Architecture": image = require("../Assets/Placeholders/architecture_placeholder.png")
@@ -17,6 +20,7 @@ function ListCard({ site, user, onNewVisit, onDeleteVisit }) {
       case "Nature": image = require("../Assets/Placeholders/nature_placeholder.png")
       break;
       default: image = require("../Assets/Placeholders/food_drink_placeholder.png")
+    }
   }
   
   return (
@@ -26,7 +30,7 @@ function ListCard({ site, user, onNewVisit, onDeleteVisit }) {
         <div className="card-body">{site.description.substring(0,50)}...</div>
         <button className="btn btn-primary" data-bs-toggle="modal" data-bs-target={`#site-details-modal-${site.id}`}>Show More</button>
         <div className='modal fade' id={`site-details-modal-${site.id}`}>
-            <ListDetails site={site} image={image} onNewVisit={onNewVisit} onDeleteVisit={onDeleteVisit} user={user}/>
+            <ListDetails site={site} image={image} onNewVisit={onNewVisit} onDeleteVisit={onDeleteVisit} user={user} onUpdateVisit={onUpdateVisit} />
         </div>
     </div>
   );

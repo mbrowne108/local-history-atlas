@@ -55,6 +55,17 @@ function App() {
     setSites(newSiteArray)
   }
 
+  function onUpdateVisit(updatedVisit) {
+    const updatedVisits = visits.map((visit) => {
+      if (visit.id === updatedVisit.id) {
+        return updatedVisit
+      } else {
+        return visit
+      }
+    })
+    setVisits(updatedVisits)
+  }
+
   if (!user) return <Login onLogin={setUser}/>
 
   return (
@@ -75,13 +86,13 @@ function App() {
           <Route 
             exact path="/listview"
             element={
-              <ListContainer user={user} sites={sites} onNewVisit={onNewVisit} onDeleteVisit={onDeleteVisit} onNewSite={onNewSite} />
+              <ListContainer user={user} sites={sites} onNewVisit={onNewVisit} onDeleteVisit={onDeleteVisit} onNewSite={onNewSite} onUpdateVisit={onUpdateVisit} />
             }
           />
           <Route 
             exact path="/profile"
             element={
-              <ProfileContainer user={user}/>
+              <ProfileContainer user={user} onDeleteVisit={onDeleteVisit} onUpdateVisit={onUpdateVisit}/>
             }
           />
         </Routes>

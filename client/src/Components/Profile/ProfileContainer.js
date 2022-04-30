@@ -17,11 +17,15 @@ function ProfileContainer({ user }) {
           <h5>Member since {profileCreateDate.toLocaleDateString()}</h5>
         </div>
         <div className="card-body">
-          <h6>Places Visited: {user.visits.length}</h6>
+          <h6 className="display-6 text-center">Places Visited: {user.visits.length}</h6>
           <ul className="list-group col-md">
             {visits.map(visit => {
               const timestamp = new Date(visit.created_at).toLocaleString()
-              return <li key={visit.id} className="list-group-item"><b>{visit.site.name} <small>{timestamp}</small></b><br/>Comment: {visit.comment}<br/><em>Rating: {visit.rating}/5</em></li>
+              let starRating = ''
+              for (let i = 0; i < 5; i++) {
+                      i < visit.rating ? starRating += "★" : starRating += "☆"
+              }
+              return <li key={visit.id} className="list-group-item list-group-item-primary"><b>{visit.site.name} <small>{timestamp}</small></b><br/>Comment: {visit.comment}<br/>Rating: {starRating}</li>
             })}
           </ul>
         </div>

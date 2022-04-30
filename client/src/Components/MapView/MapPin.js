@@ -1,7 +1,7 @@
 import React from "react";
 import { OverlayTrigger, Popover } from 'react-bootstrap';
 
-function MapPin({ site }) {
+function MapPin({ site, user }) {
   let totalRatings = 0
   site.visits.map((vst) => {
     return totalRatings += vst.rating
@@ -15,7 +15,7 @@ function MapPin({ site }) {
   }
 
   const pinInfo = (
-    <Popover id="popover-basic" title="Popover">
+    <Popover id="popover-trigger-click-root-close" title="Popover">
       <div className="card">
         <div className="card-header text-center h6">{site.name}</div>
         <div className="p-2">
@@ -30,9 +30,12 @@ function MapPin({ site }) {
 
   return (
     <div>
-      <OverlayTrigger trigger="click" placement="top" overlay={pinInfo}>
+      <OverlayTrigger trigger="click" rootClose placement="top" overlay={pinInfo}>
         <div>
-          <img type="button" src={require("../Assets/Icons/map_pin_filled.png")} alt="pin" />
+          {site.users.some((u) => u.id === user.id) ? 
+            <img type="button" src={require("../Assets/Icons/map_pin_filled.png")} alt="pin" /> :
+            <img type="button" src={require("../Assets/Icons/map_pin_empty.png")} alt="pin" />
+          }
           <p className="badge bg-primary">{site.name}</p>
         </div>
       </OverlayTrigger>

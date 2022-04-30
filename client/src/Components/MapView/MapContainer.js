@@ -60,6 +60,7 @@ function MapContainer({ sites, user, onNewVisit, onDeleteVisit, onNewSite }) {
               lat={site.lat} 
               lng={site.lng} 
               site={site}
+              user={user}
             />
           )}
         </GoogleMapReact>
