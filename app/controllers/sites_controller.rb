@@ -32,6 +32,6 @@ class SitesController < ApplicationController
     end
 
     def site_params
-        params.permit(:name, :lat, :lng, :image, :description, :category)
+        params.permit(:name, :lat, :lng, :description, :category)
     end
 end

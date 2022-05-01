@@ -14,7 +14,6 @@ function SiteCard({ site, user, onNewVisit, onDeleteVisit }) {
     i < averageRating ? starRating += "★" : starRating += "☆"
   }
 
-
   const userVisits = user.sites.map((vst) => {
     if (vst.id === site.id) {
       return vst.id

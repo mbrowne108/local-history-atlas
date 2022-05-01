@@ -2,12 +2,12 @@ import React, { useState } from "react";
 
 function NewVisitForm({ site, user, onNewVisit }) {
     const [errors, setErrors] = useState([])
-    const [image, setImage] = useState(null)
     const [formData, setFormData] = useState({
         site_id: site.id,
         comment: '',
-        rating: 0,
+        rating: 0
     })
+    const [image, setImage] = useState(null)
 
     function handleChange(e) {
         let value = e.target.value
@@ -19,15 +19,15 @@ function NewVisitForm({ site, user, onNewVisit }) {
         const visit = site.visits.find(vst => vst.user.id === user.id)
         if (visit) return alert("You've already visited here!")
 
-        const imageUpload = new FormData()
-        imageUpload.append('image', image)
+        const form = new FormData()
+        form.append('site_id', formData.site_id)
+        form.append('comment', formData.comment)
+        form.append('rating', formData.rating)
+        form.append('image', image)
 
         fetch(`/visits`, {
           method: "POST",
-          headers: {
-            "Content-Type": "application/json"
-          },
-          body: JSON.stringify(formData),
+          body: form,
         })
         .then(r => {
             if (r.ok) {
@@ -38,14 +38,10 @@ function NewVisitForm({ site, user, onNewVisit }) {
                     comment: '',
                     rating: 0
                 })
+                setImage(null)
             } else {
                 r.json().then(err => setErrors(err.errors))
             }
-
-        })
-        fetch(`/sites/${site.id}`, {
-            method: "PATCH",
-            body: imageUpload
         })
     }
 

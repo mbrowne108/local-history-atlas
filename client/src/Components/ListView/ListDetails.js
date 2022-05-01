@@ -1,7 +1,8 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import Geocode from "react-geocode";
+import { Carousel } from "react-bootstrap";
 
-function ListDetails({ site, image, user, onNewVisit, onDeleteVisit, onUpdateVisit }) {
+function ListDetails({ site, images, user, onNewVisit, onDeleteVisit, onUpdateVisit }) {
     const [showAddress, setShowAddress] = useState(false)
     const [address, setAddress] = useState('')
     const [showForm, setShowForm] = useState(false)
@@ -118,6 +119,10 @@ function ListDetails({ site, image, user, onNewVisit, onDeleteVisit, onUpdateVis
     //     );
     // }, [])
 
+    if (images.length > 1) {
+        images = images.slice(1)
+    }
+
     return (
         <div className="modal-dialog modal-dialog-scrollable modal-lg container bg-light">
             <div className="modal-content">
@@ -125,9 +130,23 @@ function ListDetails({ site, image, user, onNewVisit, onDeleteVisit, onUpdateVis
                     <h1 className="modal-title display-6">{site.name}</h1>
                     <button type="button" className="btn-close" data-bs-dismiss="modal"></button>
                 </div>
-                <div className="text-center">
-                    <img className="img-fluid img-thumbnail" src={image} alt="site-image" style={{ height: '400px', width: 'auto' }}/>
-                </div>
+
+                {/* FIX PHOTO CAROUSEL */}
+                <Carousel>
+                    {images.map((image, i) => {
+                        return (
+                            <Carousel.Item key={i}>
+                                <img className="img-fluid img-thumbnail d-block w-100" src={image} alt={`image #${i}`} style={{ height: '400px', width: '200px', objectFit: "cover"}}/>
+                            </Carousel.Item>
+                        )
+                    })}
+                </Carousel>
+
+                {/* SINGLE IMAGE INSTEAD OF CAROUSEL */}
+                {/* <div className="text-center">
+                    <img className="img-fluid img-thumbnail" src={images[0]} alt="site-image" style={{ height: '400px', width: 'auto', "object-fit": "cover"}}/>
+                </div> */}
+
                 <div className="modal-body text-left">
                     <h6>Information</h6>
                     <div className="card p-2">

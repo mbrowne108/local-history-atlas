@@ -43,6 +43,6 @@ class VisitsController < ApplicationController
     end
 
     def visit_params
-        params.permit(:rating, :comment, :site_id)
+        params.permit(:rating, :comment, :image, :site_id)
     end
 end

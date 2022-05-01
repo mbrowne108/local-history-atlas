@@ -11,7 +11,7 @@ function Login({ onLogin }) {
         <h1 className='display-1'>Atlas of Curiosities</h1>
         <p className="display-6 fst-italic fst-light"><small>A website dedicated to the collection and mapping of local history and lore</small></p>
       </div>
-      <div className="container card text-center col-6">
+      <div className="container card text-center col-sm-4">
         {showLogin ? (
             <>
                 <LoginForm onLogin={onLogin} />
