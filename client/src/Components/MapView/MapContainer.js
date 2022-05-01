@@ -44,6 +44,14 @@ function MapContainer({ sites, user, onNewVisit, onDeleteVisit, onNewSite }) {
 
   const handleApiLoaded = (map, maps) => {};
 
+  const UserMapPin = () => {
+    return (
+      <div type="button" style={{ position: "absolute", transform: "translate(-50%, -50%)" }}>
+        <img src={require("../Assets/Icons/user_icon.png")} alt="user"/>
+      </div>
+    )
+  }
+
   return (
     <div className="row m-3">
       <div className="container col-6 text-center" style={{ height: '540px', width: '960px' }}>
@@ -63,6 +71,10 @@ function MapContainer({ sites, user, onNewVisit, onDeleteVisit, onNewSite }) {
               user={user}
             />
           )}
+          <UserMapPin 
+            lat={mapCenter.lat}
+            lng={mapCenter.lng}
+          />
         </GoogleMapReact>
       </div>
       <div className="container col-sm-5">

@@ -9,6 +9,21 @@ function ProfileContainer({ user }) {
   const hoverOptions = {
   };
 
+  const VisitPin = (site) => {
+    return (
+      <div style={{ position: "absolute", transform: "translate(-50%, -50%)" }}>
+        <ReactHover options={hoverOptions}>
+          <Trigger type="trigger">
+            <img type="button" src={require("../Assets/Icons/map_pin_filled.png")} alt="pin" />
+          </Trigger>
+          <Hover type="hover">
+            <p className="badge bg-primary">{site.name}</p>
+          </Hover>
+        </ReactHover> 
+      </div>
+    )
+  }
+
   return (
     <div className="row">
       <div className="card col-md-6">
@@ -37,16 +52,7 @@ function ProfileContainer({ user }) {
           zoom={4.3}
         >
           {user.sites.map(site => 
-            <div key={site.id} lat={site.lat} lng={site.lng}>
-              <ReactHover options={hoverOptions}>
-                <Trigger type="trigger">
-                  <img type="button" src={require("../Assets/Icons/map_pin_filled.png")} alt="pin" />
-                </Trigger>
-                <Hover type="hover">
-                  <p className="badge bg-primary">{site.name}</p>
-                </Hover>
-              </ReactHover> 
-            </div>
+            <VisitPin key={site.id} lat={site.lat} lng={site.lng} site={site} />
           )}
         </GoogleMapReact>
       </div>

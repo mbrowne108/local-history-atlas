@@ -31,9 +31,9 @@ function MapPin({ site, user }) {
   return (
     <div>
       <OverlayTrigger trigger="click" rootClose placement="top" overlay={pinInfo}>
-        <div>
+        <div style={{ position: "absolute", transform: "translate(-50%, -50%)" }}>
           {site.users.some((u) => u.id === user.id) ? 
-            <img type="button" src={require("../Assets/Icons/map_pin_filled.png")} alt="pin" /> :
+            <img type="button" src={require("../Assets/Icons/map_pin_filled.png")} alt="pin"/> :
             <img type="button" src={require("../Assets/Icons/map_pin_empty.png")} alt="pin" />
           }
           <p className="badge bg-primary">{site.name}</p>
