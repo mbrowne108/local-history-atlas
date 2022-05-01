@@ -22,6 +22,7 @@ function ListCard({ site, user, onNewVisit, onDeleteVisit, onUpdateVisit }) {
     if (visit.image) {
       images.push(visit.image)
     }
+    return images
   })
     
   return (

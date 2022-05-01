@@ -2,6 +2,7 @@ import React, { useState } from "react";
 
 function NewVisitForm({ site, user, onNewVisit }) {
     const [errors, setErrors] = useState([])
+    
     const [formData, setFormData] = useState({
         site_id: site.id,
         comment: '',

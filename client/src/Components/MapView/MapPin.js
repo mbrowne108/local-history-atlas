@@ -19,7 +19,7 @@ function MapPin({ site, user }) {
       <div className="card">
         <div className="card-header text-center h6">{site.name}</div>
         <div className="p-2">
-          <small>{starRating}</small><br/>
+          {starRating}<br/>
           <small>Category: {site.category}</small><br/>
           <small>{site.dist} miles away from you</small>
         </div>

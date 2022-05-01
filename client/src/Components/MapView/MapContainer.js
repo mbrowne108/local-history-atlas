@@ -77,9 +77,9 @@ function MapContainer({ sites, user, onNewVisit, onDeleteVisit, onNewSite }) {
           </select>
           <div className="btn-group col-sm-4 mt-2 mb-2">
             <button className="btn btn-sm btn-outline-primary" disabled>Per page</button>
-            <button className="btn btn-sm btn-outline-primary" onClick={() => setSitesNumber(5)}>5</button>
-            <button className="btn btn-sm btn-outline-primary" onClick={() => setSitesNumber(10)}>10</button>
-            <button className="btn btn-sm btn-outline-primary" onClick={() => setSitesNumber(25)}>25</button>
+            <button className={sitesNumber === 5 ? `btn btn-sm btn-primary` : `btn btn-sm btn-outline-primary`} onClick={() => setSitesNumber(5)}>5</button>
+            <button className={sitesNumber === 10 ? `btn btn-sm btn-primary` : `btn btn-sm btn-outline-primary`} onClick={() => setSitesNumber(10)}>10</button>
+            <button className={sitesNumber === 25 ? `btn btn-sm btn-primary` : `btn btn-sm btn-outline-primary`} onClick={() => setSitesNumber(25)}>25</button>
           </div>
         </div>
         <div className="list-group d-grid">

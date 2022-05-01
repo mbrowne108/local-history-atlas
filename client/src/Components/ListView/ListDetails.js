@@ -3,22 +3,20 @@ import Geocode from "react-geocode";
 import { Carousel } from "react-bootstrap";
 
 function ListDetails({ site, images, user, onNewVisit, onDeleteVisit, onUpdateVisit }) {
+    const [errors, setErrors] = useState([])
+    
     const [showAddress, setShowAddress] = useState(false)
     const [address, setAddress] = useState('')
     const [showForm, setShowForm] = useState(false)
-    const [errors, setErrors] = useState([])
     const [showEditComment, setShowEditComment] = useState(false)
     const [formData, setFormData] = useState({
         site_id: site.id,
         comment: '',
         rating: 0
     })
+    const [image, setImage] = useState(null)
+
     const visit = site.visits.find(vst => vst.user.id === user.id)
-    const [editForm, setEditForm] = useState({
-        site_id: site.id,
-        comment: '',
-        rating: 0
-    })
     const formattedDescription = site.description.split(/\r?\n/)
 
     function handleChange(e) {
@@ -28,7 +26,7 @@ function ListDetails({ site, images, user, onNewVisit, onDeleteVisit, onUpdateVi
 
     function handleEdit(e) {
         let value = e.target.value
-        setEditForm({...editForm, [e.target.name]: value})
+        setFormData({...formData, [e.target.name]: value})
     }
 
     function handleDelete() {
@@ -45,24 +43,26 @@ function ListDetails({ site, images, user, onNewVisit, onDeleteVisit, onUpdateVi
 
     function handleShowAddress() {
         setShowAddress(false)
-        {Geocode.fromLatLng(site.lat, site.lng).then(
+        Geocode.fromLatLng(site.lat, site.lng).then(
             res => {
                 setAddress(res.results[0].formatted_address)
             },
         (error) => console.error(error))
-        } 
     }
 
     function formSubmit(e) {
         e.preventDefault()
         if (visit) return alert("You've already visited here!")
 
+        const form = new FormData()
+        form.append('site_id', formData.site_id)
+        form.append('comment', formData.comment)
+        form.append('rating', formData.rating)
+        form.append('image', image)
+
         fetch(`/visits`, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json"
-          },
-          body: JSON.stringify(formData),
+            method: "POST",
+            body: form,
         })
         .then(r => {
             if (r.ok) {
@@ -73,6 +73,7 @@ function ListDetails({ site, images, user, onNewVisit, onDeleteVisit, onUpdateVi
                     comment: '',
                     rating: 0
                 })
+                setImage(null)
             } else {
                 r.json().then(err => setErrors(err.errors))
             }
@@ -87,13 +88,13 @@ function ListDetails({ site, images, user, onNewVisit, onDeleteVisit, onUpdateVi
           headers: {
             "Content-Type": "application/json"
           },
-          body: JSON.stringify(editForm),
+          body: JSON.stringify(formData),
         })
         .then(r => {
             if (r.ok) {
                 r.json()
                 .then((updatedVisit) => onUpdateVisit(updatedVisit))
-                setEditForm({
+                setFormData({
                     site_id: site.id,
                     comment: '',
                     rating: 0
@@ -130,13 +131,11 @@ function ListDetails({ site, images, user, onNewVisit, onDeleteVisit, onUpdateVi
                     <h1 className="modal-title display-6">{site.name}</h1>
                     <button type="button" className="btn-close" data-bs-dismiss="modal"></button>
                 </div>
-
-                {/* FIX PHOTO CAROUSEL */}
                 <Carousel>
                     {images.map((image, i) => {
                         return (
                             <Carousel.Item key={i}>
-                                <img className="img-fluid img-thumbnail d-block w-100" src={image} alt={`image #${i}`} style={{ height: '400px', width: '200px', objectFit: "cover"}}/>
+                                <img className="img-fluid img-thumbnail d-block w-100" src={image} alt={i} style={{ height: '400px', width: '200px', objectFit: "cover"}}/>
                             </Carousel.Item>
                         )
                     })}
@@ -187,13 +186,17 @@ function ListDetails({ site, images, user, onNewVisit, onDeleteVisit, onUpdateVi
                                         </div>)
                                 })}
                             </div>
-                            <div className='col-8'>
+                            <div className='col-md-8'>
                                 <label>Comment:</label>
                                 <input type="text" name="comment" value={formData.comment} onChange={handleChange} className='form-control'/>
                             </div>
-                            <div className='col-4 mb-2'>
+                            <div className='col-md-4 mb-2'>
                                 <label>Rating: <small>(between 0 and 5)</small></label>
                                 <input type="number" name="rating" value={formData.rating} onChange={handleChange} className='form-control'/>
+                            </div>
+                            <div className='mb-3'>
+                                <label>Upload a photo of your visit</label>
+                                <input type="file" accept="image/*" name="image" value={formData.image} onChange={(e) => setImage(e.target.files[0])} className='form-control'/>
                             </div>
                             <div className='mb-2'>
                                 <button type="submit" className='btn btn-primary col-4'>Add Visit</button>  
@@ -218,8 +221,8 @@ function ListDetails({ site, images, user, onNewVisit, onDeleteVisit, onUpdateVi
                                             </h6>
                                             {showEditComment ? 
                                                 <form className="col-sm-6" onSubmit={handleUpdate}>
-                                                    <input type="text" name="comment" value={editForm.comment} onChange={handleEdit} placeholder={visit.comment} className='form-control'/>
-                                                    <input type="number" name="rating" value={editForm.rating} onChange={handleEdit} placeholder={visit.rating} className='form-control'/>
+                                                    <input type="text" name="comment" value={formData.comment} onChange={handleEdit} placeholder={visit.comment} className='form-control'/>
+                                                    <input type="number" name="rating" value={formData.rating} onChange={handleEdit} placeholder={visit.rating} className='form-control'/>
                                                     <button className="btn btn-secondary">Submit Changes</button>
                                                 </form> :
                                                 <div>
