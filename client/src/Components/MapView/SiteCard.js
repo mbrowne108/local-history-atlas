@@ -36,7 +36,7 @@ function SiteCard({ site, user, onNewVisit, onDeleteVisit }) {
 
   return (
     <div>
-      <div className="list-group-item list-group-item-action row">
+      <div className="list-group-item list-group-item-action">
         <h6 className="d-inline-block col-11">{site.name} <small>{averageRating || averageRating === 0 ? starRating : null} <small>{site.dist} miles away </small></small></h6>
         {userVisits.includes(site.id) ? 
           <button className="btn btn-sm btn-outline-secondary col-1 p-1" onClick={handleDelete}> <img src={require("../Assets/Icons/map_pin_filled.png")} alt="pin_filled"/></button> :
