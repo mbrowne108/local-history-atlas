@@ -1,28 +1,10 @@
 import React from "react";
 import GoogleMapReact from 'google-map-react';
-import ReactHover, { Trigger, Hover } from "react-hover";
+import { OverlayTrigger, Tooltip } from 'react-bootstrap';
 
-function ProfileContainer({ user }) {
+function Profile({ user }) {
   const visits = user.visits
   const profileCreateDate = new Date(user.created_at)
-
-  const hoverOptions = {
-  };
-
-  const VisitPin = (site) => {
-    return (
-      <div style={{ position: "absolute", transform: "translate(-50%, -50%)" }}>
-        <ReactHover options={hoverOptions}>
-          <Trigger type="trigger">
-            <img type="button" src={require("../Assets/Icons/map_pin_filled.png")} alt="pin" />
-          </Trigger>
-          <Hover type="hover">
-            <p className="badge bg-primary">{site.name}</p>
-          </Hover>
-        </ReactHover> 
-      </div>
-    )
-  }
 
   return (
     <div className="row">
@@ -52,7 +34,19 @@ function ProfileContainer({ user }) {
           zoom={4.3}
         >
           {user.sites.map(site => 
-            <VisitPin key={site.id} lat={site.lat} lng={site.lng} site={site} />
+            <OverlayTrigger 
+              key={site.id}
+              lat={site.lat}
+              lng={site.lng}
+              delay={{ show: 50, hide: 300 }}
+              overlay={
+                <Tooltip id="tooltip">
+                  <p className="badge bg-primary">{site.name}</p>
+                </Tooltip>
+              }
+            >
+              <img type="button" src={require("./Assets/Icons/map_pin_filled.png")} alt="pin" style={{ position: "absolute", transform: "translate(-50%, -50%)" }} />
+            </OverlayTrigger>
           )}
         </GoogleMapReact>
       </div>
@@ -60,4 +54,4 @@ function ProfileContainer({ user }) {
   );
 }
 
-export default ProfileContainer;
+export default Profile;

@@ -5,7 +5,7 @@ import SiteCard from "./SiteCard.js";
 import MapPin from "./MapPin.js";
 import NewSiteForm from "./NewSiteForm.js";
 
-function MapContainer({ sites, user, onNewVisit, onDeleteVisit, onNewSite }) {
+function MapContainer({ sites, user, onNewVisit, onDeleteVisit, onNewSite, onUpdateVisit }) {
   const [mapCenter, setMapCenter] = useState({zoom: 15})
   const [filterValue, setFilterValue] = useState('')
   const [sitesNumber, setSitesNumber] = useState(10)
@@ -69,6 +69,9 @@ function MapContainer({ sites, user, onNewVisit, onDeleteVisit, onNewSite }) {
               lng={site.lng} 
               site={site}
               user={user}
+              onNewVisit={onNewVisit}
+              onDeleteVisit={onDeleteVisit}
+              onUpdateVisit={onUpdateVisit}
             />
           )}
           <UserMapPin 

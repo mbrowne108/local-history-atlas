@@ -3,7 +3,7 @@ import { Routes, Route } from 'react-router-dom';
 
 import Login from "./Login/Login.js";
 import NavBar from './NavBar.js'
-import ProfileContainer from "./Profile/ProfileContainer.js";
+import Profile from "./Profile.js";
 import MapContainer from "./MapView/MapContainer.js";
 import ListContainer from "./ListView/ListContainer.js";
 
@@ -80,7 +80,7 @@ function App() {
           <Route 
             exact path="/"
             element={
-              <MapContainer user={user} sites={sites} onNewVisit={onNewVisit} onDeleteVisit={onDeleteVisit} onNewSite={onNewSite} />
+              <MapContainer user={user} sites={sites} onNewVisit={onNewVisit} onDeleteVisit={onDeleteVisit} onNewSite={onNewSite} onUpdateVisit={onUpdateVisit}/>
             }
           />
           <Route 
@@ -92,7 +92,7 @@ function App() {
           <Route 
             exact path="/profile"
             element={
-              <ProfileContainer user={user} onDeleteVisit={onDeleteVisit} onUpdateVisit={onUpdateVisit}/>
+              <Profile user={user} onDeleteVisit={onDeleteVisit} onUpdateVisit={onUpdateVisit}/>
             }
           />
         </Routes>
