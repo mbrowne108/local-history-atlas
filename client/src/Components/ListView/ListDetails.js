@@ -128,16 +128,11 @@ function ListDetails({ site, images, user }) {
                     {images.map((image, i) => {
                         return (
                             <Carousel.Item key={i}>
-                                <img className="img-fluid img-thumbnail d-block w-100" src={image} alt={i} style={{ height: '400px', width: '200px', objectFit: "cover"}}/>
+                                <img className="img-fluid img-thumbnail d-block w-100" src={image} alt={i} style={{ height: '400px', width: '200px', objectFit: "cover" }}/>
                             </Carousel.Item>
                         )
                     })}
                 </Carousel>
-
-                {/* SINGLE IMAGE INSTEAD OF CAROUSEL */}
-                {/* <div className="text-center">
-                    <img className="img-fluid img-thumbnail" src={images[0]} alt="site-image" style={{ height: '400px', width: 'auto', "object-fit": "cover"}}/>
-                </div> */}
 
                 <div className="modal-body text-left">
                     <h6>Information</h6>
