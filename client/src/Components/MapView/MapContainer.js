@@ -5,7 +5,7 @@ import SiteCard from "./SiteCard.js";
 import MapPin from "./MapPin.js";
 import NewSiteForm from "./NewSiteForm.js";
 
-function MapContainer({ sites, user, onNewVisit, onDeleteVisit, onNewSite, onUpdateVisit }) {
+function MapContainer({ sites, user, onUpdateVisit }) {
   const [mapCenter, setMapCenter] = useState({zoom: 15})
   const [filterValue, setFilterValue] = useState('')
   const [sitesNumber, setSitesNumber] = useState(10)
@@ -69,9 +69,6 @@ function MapContainer({ sites, user, onNewVisit, onDeleteVisit, onNewSite, onUpd
               lng={site.lng} 
               site={site}
               user={user}
-              onNewVisit={onNewVisit}
-              onDeleteVisit={onDeleteVisit}
-              onUpdateVisit={onUpdateVisit}
             />
           )}
           <UserMapPin 
@@ -103,8 +100,6 @@ function MapContainer({ sites, user, onNewVisit, onDeleteVisit, onNewSite, onUpd
                 key={site.id} 
                 site={site} 
                 user={user} 
-                onNewVisit={onNewVisit} 
-                onDeleteVisit={onDeleteVisit} 
               />)
             }
             <div className="card btn btn-lg btn-outline-primary" data-bs-toggle="modal" data-bs-target='#new-site-modal'>
@@ -112,7 +107,7 @@ function MapContainer({ sites, user, onNewVisit, onDeleteVisit, onNewSite, onUpd
             </div>
         </div>
         <div className='modal fade' id='new-site-modal'>
-          <NewSiteForm user={user} onNewSite={onNewSite}/>
+          <NewSiteForm user={user} />
         </div>
       </div>
     </div>

@@ -1,7 +1,10 @@
 import React, { useState } from "react";
 import Geocode from "react-geocode";
+import { useDispatch } from "react-redux"
+import { addSite } from "../../Redux/actions/siteActions"
 
-function NewSiteForm({ onNewSite }) {
+function NewSiteForm() {
+    const dispatch = useDispatch()
     const [errors, setErrors] = useState([])
     const [address, setAddress] = useState('')
     const [formData, setFormData] = useState({
@@ -24,7 +27,6 @@ function NewSiteForm({ onNewSite }) {
         Geocode.setApiKey(process.env.REACT_APP_GOOGLE_MAPS_API_KEY)
         Geocode.setLanguage("en");
         Geocode.setRegion("us");
-        Geocode.enableDebug();
         Geocode.fromAddress(address).then(res => {
                 const { lat, lng } = res.results[0].geometry.location;
                 setFormData({...formData, lat: lat, lng: lng})
@@ -45,7 +47,7 @@ function NewSiteForm({ onNewSite }) {
         .then(r => {
             if (r.ok) {
                 r.json()
-                .then((newSite) => onNewSite(newSite))
+                .then((newSite) => dispatch(addSite(newSite)))
                 setFormData({
                     name: '',
                     lat: 0.0,

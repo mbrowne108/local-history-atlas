@@ -1,8 +1,10 @@
 import React, { useState } from "react";
+import { useDispatch } from "react-redux"
+import { addVisit } from "../../Redux/actions/visitActions"
 
-function NewVisitForm({ site, user, onNewVisit }) {
+function NewVisitForm({ site, user }) {
+    const dispatch = useDispatch()
     const [errors, setErrors] = useState([])
-    
     const [formData, setFormData] = useState({
         site_id: site.id,
         comment: '',
@@ -24,7 +26,7 @@ function NewVisitForm({ site, user, onNewVisit }) {
         form.append('site_id', formData.site_id)
         form.append('comment', formData.comment)
         form.append('rating', formData.rating)
-        form.append('image', image)
+        if (image) form.append('image', image)
 
         fetch(`/visits`, {
           method: "POST",
@@ -33,7 +35,7 @@ function NewVisitForm({ site, user, onNewVisit }) {
         .then(r => {
             if (r.ok) {
                 r.json()
-                .then((newVisit) => onNewVisit(newVisit))
+                .then((newVisit) => dispatch(addVisit(newVisit)))
                 setFormData({
                     site_id: site.id,
                     comment: '',

@@ -6,11 +6,15 @@ import NavBar from './NavBar.js'
 import Profile from "./Profile.js";
 import MapContainer from "./MapView/MapContainer.js";
 import ListContainer from "./ListView/ListContainer.js";
+import { useSelector, useDispatch } from 'react-redux'
+import { setSites } from "../Redux/actions/siteActions.js";
+import { setVisits } from "../Redux/actions/visitActions.js";
 
 function App() {
   const [user, setUser] = useState(null)
-  const [sites, setSites] = useState([])
-  const [visits, setVisits] = useState([])
+  const sites = useSelector(state => state.sites)
+  const visits = useSelector(state => state.visits)
+  const dispatch = useDispatch()
 
   useEffect(() => {
     fetch("/me").then((r) => {
@@ -23,13 +27,13 @@ function App() {
   useEffect(() => {
     fetch('/sites')
     .then(r => r.json())
-    .then(data => setSites(data))
+    .then(data => dispatch(setSites(data)))
   }, [visits])
 
   useEffect(() => {
     fetch('/visits')
     .then(r => r.json())
-    .then(data => setVisits(data))
+    .then(data => dispatch(setVisits(data)))
   }, [])
 
   function handleLogoutClick() {
@@ -38,32 +42,6 @@ function App() {
         setUser(null)
       }
     })
-  }
-
-  function onNewVisit(newVisit) {
-    const newVisitArray = [...visits, newVisit]
-    setVisits(newVisitArray)
-  }
-
-  function onDeleteVisit(deletedVisit) {
-    const updatedVisits = visits.filter((visit) => visit.id !== deletedVisit.id)
-    setVisits(updatedVisits)
-  }
-
-  function onNewSite(newSite) {
-    const newSiteArray = [...sites, newSite]
-    setSites(newSiteArray)
-  }
-
-  function onUpdateVisit(updatedVisit) {
-    const updatedVisits = visits.map((visit) => {
-      if (visit.id === updatedVisit.id) {
-        return updatedVisit
-      } else {
-        return visit
-      }
-    })
-    setVisits(updatedVisits)
   }
 
   if (!user) return <Login onLogin={setUser}/>
@@ -80,19 +58,19 @@ function App() {
           <Route 
             exact path="/"
             element={
-              <MapContainer user={user} sites={sites} onNewVisit={onNewVisit} onDeleteVisit={onDeleteVisit} onNewSite={onNewSite} onUpdateVisit={onUpdateVisit}/>
+              <MapContainer user={user} sites={sites} />
             }
           />
           <Route 
             exact path="/listview"
             element={
-              <ListContainer user={user} sites={sites} onNewVisit={onNewVisit} onDeleteVisit={onDeleteVisit} onNewSite={onNewSite} onUpdateVisit={onUpdateVisit} />
+              <ListContainer user={user} sites={sites} />
             }
           />
           <Route 
             exact path="/profile"
             element={
-              <Profile user={user} onDeleteVisit={onDeleteVisit} onUpdateVisit={onUpdateVisit}/>
+              <Profile user={user} />
             }
           />
         </Routes>

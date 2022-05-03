@@ -1,7 +1,11 @@
 import React from "react";
 import NewVisitForm from "./NewVisitForm.js";
+import { deleteVisit } from "../../Redux/actions/visitActions"
+import { useDispatch } from "react-redux"
 
-function SiteCard({ site, user, onNewVisit, onDeleteVisit }) {
+function SiteCard({ site, user }) {
+  const dispatch = useDispatch()
+
   let totalRatings = 0
   site.visits.map((vst) => {
     return totalRatings += vst.rating
@@ -30,7 +34,7 @@ function SiteCard({ site, user, onNewVisit, onDeleteVisit }) {
             method: "DELETE",
         })
             .then(r => r.json())
-            .then(() => onDeleteVisit(visit))
+            .then((deletedVisit) => dispatch(deleteVisit(deletedVisit.id)))
     }
   }
 
@@ -44,7 +48,7 @@ function SiteCard({ site, user, onNewVisit, onDeleteVisit }) {
         }
       </div>
       <div className='modal fade' id={`new-visit-modal-${site.id}`}>
-        <NewVisitForm site={site} user={user} onNewVisit={onNewVisit}/>
+        <NewVisitForm site={site} user={user}/>
       </div>
     </div>
   );

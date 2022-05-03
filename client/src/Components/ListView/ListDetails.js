@@ -1,10 +1,12 @@
 import React, { useState } from "react";
 import Geocode from "react-geocode";
 import { Carousel } from "react-bootstrap";
+import { useDispatch } from "react-redux"
+import { addVisit, deleteVisit, updateVisit } from "../../Redux/actions/visitActions"
 
-function ListDetails({ site, images, user, onNewVisit, onDeleteVisit, onUpdateVisit }) {
+function ListDetails({ site, images, user }) {
+    const dispatch = useDispatch()
     const [errors, setErrors] = useState([])
-    
     const [showAddress, setShowAddress] = useState(false)
     const [address, setAddress] = useState('')
     const [showForm, setShowForm] = useState(false)
@@ -37,17 +39,17 @@ function ListDetails({ site, images, user, onNewVisit, onDeleteVisit, onUpdateVi
                 method: "DELETE",
             })
                 .then(r => r.json())
-                .then(() => onDeleteVisit(visit))
+                .then((deletedVisit) => dispatch(deleteVisit(deletedVisit.id)))
         }
     }
 
     function handleShowAddress() {
-        setShowAddress(false)
         Geocode.fromLatLng(site.lat, site.lng).then(
             res => {
                 setAddress(res.results[0].formatted_address)
             },
         (error) => console.error(error))
+        setShowAddress(true)
     }
 
     function formSubmit(e) {
@@ -67,7 +69,7 @@ function ListDetails({ site, images, user, onNewVisit, onDeleteVisit, onUpdateVi
         .then(r => {
             if (r.ok) {
                 r.json()
-                .then((newVisit) => onNewVisit(newVisit))
+                .then((newVisit) => dispatch(addVisit(newVisit)))
                 setFormData({
                     site_id: site.id,
                     comment: '',
@@ -93,7 +95,7 @@ function ListDetails({ site, images, user, onNewVisit, onDeleteVisit, onUpdateVi
         .then(r => {
             if (r.ok) {
                 r.json()
-                .then((updatedVisit) => onUpdateVisit(updatedVisit))
+                .then((updatedVisit) => dispatch(updateVisit(updatedVisit)))
                 setFormData({
                     site_id: site.id,
                     comment: '',
@@ -109,16 +111,7 @@ function ListDetails({ site, images, user, onNewVisit, onDeleteVisit, onUpdateVi
     Geocode.setApiKey(process.env.REACT_APP_GOOGLE_MAPS_API_KEY)
     Geocode.setLanguage("en");
     Geocode.setRegion("us");
-    Geocode.enableDebug();
 
-    // useEffect(() => {
-    //     Geocode.fromLatLng(site.lat, site.lng).then(
-    //         res => {
-    //             setAddress(res.results[0].formatted_address)
-    //         },
-    //         (error) => console.error(error)
-    //     );
-    // }, [])
 
     if (images.length > 1) {
         images = images.slice(1)
@@ -153,11 +146,11 @@ function ListDetails({ site, images, user, onNewVisit, onDeleteVisit, onUpdateVi
                             {showAddress ? 
                                 <small>
                                     {' ' + address + ' '}
-                                    <button className="btn btn-sm btn-outline-primary" onClick={handleShowAddress}>Show coordinates</button>  
+                                    <button className="btn btn-sm btn-outline-primary" onClick={() => setShowAddress(false)}>Show coordinates</button>  
                                 </small> :
                                 <small>
                                     {' ' + site.lat}, {site.lng + ' '}
-                                    <button className="btn btn-sm btn-outline-primary" onClick={() => setShowAddress(true)}>Show address</button> 
+                                    <button className="btn btn-sm btn-outline-primary" onClick={handleShowAddress}>Show address</button> 
                                 </small> 
                             }
                             <a 
