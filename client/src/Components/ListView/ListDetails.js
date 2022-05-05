@@ -60,7 +60,7 @@ function ListDetails({ site, images, user }) {
         form.append('site_id', formData.site_id)
         form.append('comment', formData.comment)
         form.append('rating', formData.rating)
-        form.append('image', image)
+        if (image) form.append('image', image)
 
         fetch(`/visits`, {
             method: "POST",
