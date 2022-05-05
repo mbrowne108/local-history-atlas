@@ -1,0 +1,18 @@
+development:
+  cloud_name: dr4zzpfra
+  api_key: '525391631488747'
+  api_secret: "HqFZnqWqcst-EVLu7UBeRTzRvZw"
+  enhance_image_tag: true
+  static_file_support: false
+production:
+  cloud_name: dr4zzpfra
+  api_key: '525391631488747'
+  api_secret: "HqFZnqWqcst-EVLu7UBeRTzRvZw"
+  enhance_image_tag: true
+  static_file_support: true
+test:
+  cloud_name: dr4zzpfra
+  api_key: '525391631488747'
+  api_secret: "HqFZnqWqcst-EVLu7UBeRTzRvZw"
+  enhance_image_tag: true
+  static_file_support: false
