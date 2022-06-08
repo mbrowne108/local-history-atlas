@@ -4,6 +4,8 @@
 
 This is an app to keep track of and add new interesting local history sites anywhere in the world.
 
+Deployed app can be viewed at [https://atlas-of-curiosities.herokuapp.com/](https://atlas-of-curiosities.herokuapp.com/). Use admin login to view. UN: matt PW: 123
+
 ## Purpose of the App
 
 This is the culmination of a Flatiron School phase teaching React, Ruby, Active Record, and Rails. In this app you can add new historical sites and have users log in and visit, rate, and comment on them. The locations of these site are mapped on a Google Map in the ``Map View`` tab, and users can click on each pin to show various bits of information. Additional information, including other user comments, are included in the ``List View`` tab.
@@ -35,7 +37,7 @@ To start the front end server, run : ``npm start --prefix client`` The server wi
 
 The front end consists of React components fetching data from our JSON API, using fetch requests to perform CRUD actions.
 
-Additionally, the site is hosted on Heroku at [atlas-of-curiosities.herokuapp.com/](https://atlas-of-curiosities.herokuapp.com/). The following actions below can be accessed on the remote server by replacing **localhost:4000** with **pantry-tracker-app.herokuapp.com/**.
+Additionally, the site is hosted on Heroku at [atlas-of-curiosities.herokuapp.com/](https://atlas-of-curiosities.herokuapp.com/). The following actions below can be accessed on the remote server by replacing **localhost:4000** with **atlas-of-curiosities.herokuapp.com/**.
 
 
 You may create your own user login or additionally check out the admin user: Username: ``matt``, Password: ``123``
